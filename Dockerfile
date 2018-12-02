@@ -24,13 +24,12 @@ RUN apt-get update && \
     # need this to run geoserver
     apt-get --yes install openjdk-8-jre-headless
 
-# download geoserver archive
-RUN wget $GS_URL
-RUN unzip geoserver-$GS_VERSION-bin.zip
-RUN mv geoserver-$GS_VERSION $GEOSERVER_HOME
-
-WORKDIR /opt/geoserver/bin
-RUN chmod +x startup.sh
+# download and extract geoserver archive
+RUN wget $GS_URL && \
+    unzip $GS_ARCHIVE_FILENAME && \
+    mv geoserver-$GS_VERSION $GEOSERVER_HOME && \
+    chmod +x ${GEOSERVER_HOME}/bin/startup.sh && \
+    rm $GS_ARCHIVE_FILENAME
 
 # clean up
 RUN apt-get --yes purge wget unzip && apt-get --yes clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
