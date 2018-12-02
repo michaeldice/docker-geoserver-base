@@ -22,17 +22,17 @@ RUN apt-get update && \
     # need these just during build
     apt-get --yes install wget unzip && \
     # need this to run geoserver
-    apt-get --yes install openjdk-8-jre-headless
-
-# download and extract geoserver archive
-RUN wget $GS_URL && \
+    apt-get --yes install openjdk-8-jre-headless && \
+    # download and extract geoserver archive
+    wget $GS_URL && \
     unzip $GS_ARCHIVE_FILENAME && \
     mv geoserver-$GS_VERSION $GEOSERVER_HOME && \
     chmod +x ${GEOSERVER_HOME}/bin/startup.sh && \
-    rm $GS_ARCHIVE_FILENAME
-
-# clean up
-RUN apt-get --yes purge wget unzip && apt-get --yes clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    # clean up
+    rm $GS_ARCHIVE_FILENAME && \
+    apt-get --yes purge wget unzip && \
+    apt-get --yes clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 EXPOSE 8080
 ENTRYPOINT ["/opt/geoserver/bin/startup.sh"]
