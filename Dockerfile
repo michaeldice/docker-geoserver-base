@@ -4,7 +4,7 @@
 # https://docs.geoserver.org/stable/en/user/installation/linux.html
 # http://docs.geonode.org/en/master/tutorials/advanced/geonode_production/adv_gsconfig/gsproduction.html
 
-FROM ubuntu:18.04
+FROM openjdk:8-jre-alpine
 
 ARG GS_VERSION=2.13.0
 ARG GS_ARCHIVE_FILENAME=geoserver-${GS_VERSION}-bin.zip
@@ -14,25 +14,20 @@ ARG GS_URL=https://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VE
 ENV JAVA_OPTS -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
 ENV GEOSERVER_HOME /opt/geoserver
 
-ARG DEBIAN_FRONTEND=noninteractive
-
 WORKDIR /tmp
 
-RUN apt-get update && \
+RUN set -ex && \
     # need these just during build
-    apt-get --yes install wget unzip && \
-    # need this to run geoserver
-    apt-get --yes install openjdk-8-jre-headless && \
+    apk add --no-cache wget unzip && \
     # download and extract geoserver archive
-    wget $GS_URL && \
-    unzip $GS_ARCHIVE_FILENAME && \
-    mv geoserver-$GS_VERSION $GEOSERVER_HOME && \
-    chmod +x ${GEOSERVER_HOME}/bin/startup.sh && \
+    wget "$GS_URL" && \
+    unzip "$GS_ARCHIVE_FILENAME" && \
+    mkdir "/opt" && \
+    mv "geoserver-$GS_VERSION" "$GEOSERVER_HOME" && \
+    chmod +x "${GEOSERVER_HOME}/bin/startup.sh" && \
     # clean up
-    rm $GS_ARCHIVE_FILENAME && \
-    apt-get --yes purge wget unzip && \
-    apt-get --yes clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    rm "$GS_ARCHIVE_FILENAME" && \
+    apk del --no-cache wget unzip
 
 EXPOSE 8080
 ENTRYPOINT ["/opt/geoserver/bin/startup.sh"]
