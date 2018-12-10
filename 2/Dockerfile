@@ -6,7 +6,7 @@
 
 FROM openjdk:8-jre-alpine
 
-ARG GS_VERSION=2.14.1
+ARG GS_VERSION=2.13.2
 ARG GS_ARCHIVE_FILENAME=geoserver-${GS_VERSION}-bin.zip
 ARG GS_URL=https://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/${GS_ARCHIVE_FILENAME}
 
