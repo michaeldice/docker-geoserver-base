@@ -24,7 +24,7 @@ RUN set -ex && \
     # download and extract geoserver archive
     wget "$GS_URL" && \
     unzip "$GS_ARCHIVE_FILENAME" && \
-    mkdir "/opt" && \
+    mkdir -p "/opt" && \
     mv "geoserver-$GS_VERSION" "$GEOSERVER_HOME" && \
     chmod +x "${GEOSERVER_HOME}/bin/startup.sh" && \
     # install CSS extension
