@@ -6,12 +6,13 @@
 
 FROM openjdk:8-jre-alpine
 
-ARG GS_VERSION=2.14.1
+ARG GS_VERSION=2.14.2
 ARG GS_ARCHIVE_FILENAME=geoserver-${GS_VERSION}-bin.zip
 ARG GS_URL=https://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/${GS_ARCHIVE_FILENAME}
 ARG GS_CSS_ARCHIVE_FILENAME=geoserver-${GS_VERSION}-css-plugin.zip
 ARG GS_CSS_URL=http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/${GS_CSS_ARCHIVE_FILENAME}
-
+ARG GS_WPS_ARCHIVE_FILENAME=geoserver-${GS_VERSION}-wps-plugin.zip
+ARG GS_WPS_URL=http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/${GS_WPS_ARCHIVE_FILENAME}
 # for correct cpu/memory detection inside a container
 ENV JAVA_OPTS -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
 ENV GEOSERVER_HOME /opt/geoserver
@@ -27,10 +28,14 @@ RUN set -ex && \
     mkdir -p "/opt" && \
     mv "geoserver-$GS_VERSION" "$GEOSERVER_HOME" && \
     chmod +x "${GEOSERVER_HOME}/bin/startup.sh" && \
+    # install WPS extension
+    wget "$GS_WPS_URL" && \
+    unzip "$GS_WPS_ARCHIVE_FILENAME" -d "/opt/geoserver/webapps/geoserver/WEB-INF/lib" && \
     # install CSS extension
     wget "$GS_CSS_URL" && \
     unzip "$GS_CSS_ARCHIVE_FILENAME" -d "/opt/geoserver/webapps/geoserver/WEB-INF/lib" && \
     # clean up
+    rm "$GS_WPS_ARCHIVE_FILENAME" && \
     rm "$GS_CSS_ARCHIVE_FILENAME" && \
     rm "$GS_ARCHIVE_FILENAME" && \
     apk del --no-cache wget unzip
