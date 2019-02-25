@@ -16,6 +16,8 @@ ENV DISABLE_GEOSERVER_CONSOLE false
 
 WORKDIR /tmp
 
+COPY startup-geoserver-base.sh /startup-geoserver-base.sh
+
 RUN set -ex && \
     # need these just during build
     apk add --no-cache wget unzip && \
