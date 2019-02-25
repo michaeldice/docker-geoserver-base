@@ -12,6 +12,7 @@ ARG GS_URL=https://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VE
 # for correct cpu/memory detection inside a container
 ENV JAVA_OPTS -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
 ENV GEOSERVER_HOME /opt/geoserver
+ENV DISABLE_GEOSERVER_CONSOLE false
 
 WORKDIR /tmp
 
@@ -29,4 +30,4 @@ RUN set -ex && \
     apk del --no-cache wget unzip
 
 EXPOSE 8080
-ENTRYPOINT ["/opt/geoserver/bin/startup.sh"]
+ENTRYPOINT ["/startup-geoserver-base.sh"]
