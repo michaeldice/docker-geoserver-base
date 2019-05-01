@@ -24,3 +24,5 @@ I create latest tags for each minor version. i.e. `2.15-latest`.
 I rebuild the images every week to ensure I pull in any updates to the base
 image. So I recommend you use one of these tags to ensure you get the latest
 security updates.
+
+But keep in mind, I drop support for minor versions when GeoServer does.
