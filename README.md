@@ -19,8 +19,8 @@ new point releases of this image.
 
 # Base Image & Tags
 
-This image uses `openjdk:8-jre-alpine` as a base image to minimise size and
-risk of vulnerable packages.
+This image uses `openjdk:8-jre-alpine` as a base image to minimise image size
+and risk of vulnerable packages.
 
 I create latest tags for each minor version. i.e. `2.15-latest`.
 
