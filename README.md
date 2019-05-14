@@ -1,3 +1,6 @@
+[![Build status](https://dev.azure.com/patros/OpenSource/_apis/build/status/docker-geoserver-base)](https://dev.azure.com/patros/OpenSource/_build/latest?definitionId=19)
+![Docker Pulls](https://img.shields.io/docker/pulls/coderpatros/geoserver-base.svg)
+
 # GeoServer Base Docker Container
 
 Although you can use this to try out GeoServer this isn't really geared up for
