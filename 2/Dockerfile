@@ -9,6 +9,11 @@ FROM openjdk:8-jre-alpine
 ARG GS_VERSION=2.14.2
 ARG GS_ARCHIVE_FILENAME=geoserver-${GS_VERSION}-bin.zip
 ARG GS_URL=https://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/${GS_ARCHIVE_FILENAME}
+ARG GS_SQLSERVER_FILENAME=geoserver-${GS_VERSION}-sqlserver-plugin.zip
+ARG GS_SQLSERVER_URL=http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/${GS_SQLSERVER_FILENAME}
+ARG MS_JDBC_FILENAME=sqljdbc_6.0.8112.200_enu.tar.gz
+ARG MS_JDBC_URL=https://download.microsoft.com/download/0/2/A/02AAE597-3865-456C-AE7F-613F99F850A8/${MS_JDBC_FILENAME}
+
 # for correct cpu/memory detection inside a container
 ENV JAVA_OPTS -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
 ENV GEOSERVER_HOME /opt/geoserver
@@ -18,9 +23,10 @@ WORKDIR /tmp
 
 COPY startup-geoserver-base.sh /startup-geoserver-base.sh
 
+# need these just during build
+RUN apk add --no-cache wget unzip
+
 RUN set -ex && \
-    # need these just during build
-    apk add --no-cache wget unzip && \
     # download and extract geoserver archive
     wget "$GS_URL" && \
     unzip "$GS_ARCHIVE_FILENAME" && \
@@ -28,8 +34,25 @@ RUN set -ex && \
     mv "geoserver-$GS_VERSION" "$GEOSERVER_HOME" && \
     chmod +x "${GEOSERVER_HOME}/bin/startup.sh" && \
     # clean up
-    rm "$GS_ARCHIVE_FILENAME" && \
-    apk del --no-cache wget unzip
+    rm "$GS_ARCHIVE_FILENAME"
+
+RUN set -ex && \
+    # download and extract geoserver archive
+    wget "$GS_SQLSERVER_URL" && \
+    unzip "$GS_SQLSERVER_FILENAME" && \
+    mv gt-jdbc-sqlserver-20.2.jar /opt/geoserver/webapps/geoserver/WEB-INF/lib/gt-jdbc-sqlserver-20.2.jar && \
+    # clean up
+    rm "$GS_SQLSERVER_FILENAME"
+
+RUN set -ex && \
+    # download and extract geoserver archive
+    wget "$MS_JDBC_URL" && \
+    tar -xvzf  "$MS_JDBC_FILENAME" && \
+    mv ./sqljdbc_6.0/enu/jre8/sqljdbc42.jar /opt/geoserver/webapps/geoserver/WEB-INF/lib/sqljdbc42.jar && \
+    # clean up
+    rm "$MS_JDBC_FILENAME"
+
+RUN apk del --no-cache wget unzip
 
 EXPOSE 8080
 ENTRYPOINT ["/startup-geoserver-base.sh"]
