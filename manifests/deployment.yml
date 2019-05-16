@@ -1,0 +1,16 @@
+apiVersion : apps/v1beta1
+kind: Deployment
+metadata:
+  name: michaeldicedockergeoserverbase 
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: michaeldicedockergeoserverbase 
+    spec:
+      containers:
+        - name: michaeldicedockergeoserverbase 
+          image: mikek8.azurecr.io/michaeldicedockergeoserverbase 
+          ports:
+          - containerPort: 8080
