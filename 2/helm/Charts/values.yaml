@@ -1,0 +1,60 @@
+# Default values for platform-service
+# Likely you will make a copy of this for your own platform service
+
+# ToDo - Parameterize and/or include:
+# mtlsEnabled=true
+# other tls stuff
+# containerPort
+# routing rules for service
+
+platform-service:
+  app: spi-geoserver
+  namespace: spi
+  version: v1
+  replicaCount: 1
+
+  image:
+    repository: devpusecr.azurecr.io/spi-geoserver
+    tag: 20190221.9
+    pullPolicy: IfNotPresent
+    pullSecret: spi-geoserver-secret
+    containerPort: 8000
+
+  service:
+    #type: ClusterIP
+    port: 80
+
+  gateway:
+    exposeService: true  # map virtual service to a gateway expose this service
+    name: default/gateway   # gateway name
+    createGateway: false # create a gateway to expose access to this cluster
+    hosts:
+      - devsph.dnvgl.com # list of hosts to direct to this gateway/service
+
+  apiAuthentication:
+    enabled: false # whether the login redirect & callback envoy filter should be applied
+
+  forwardAuthentication:
+    enabled: false # whether the login redirect & callback envoy filter should be applied
+    jwt:
+      createPolicy: false # whether JWT authorization policy should be applied
+
+  environmentVariables: {}
+
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}

@@ -1,0 +1,42 @@
+trigger:
+- master
+
+variables:
+  chartName: 'spi-geoserver'
+  imageTag: $(Build.BuildNumber)
+  imageName: spi-geoserver:$(imageTag)
+  secretName: spi-geoserver-secret
+  namespace: spi9-dev
+  releaseName: spi9-dev-geoserver
+  azureSubscriptionEndpoint: 'SW Pipeline Ecosystem'
+  kubernetesServiceEndpoint: devpusek8s01sph
+  azureContainerRegistry: devpusecr.azurecr.io
+
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: michaeldice/docker-geoserver-sqlserver
+
+stages:
+- stage: Build
+  jobs:
+  - template: build-templates/build-platform-service-job.yaml@templates
+    parameters:
+      azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+      azureContainerRegistry: $(azureContainerRegistry)
+      imageName: $(imageName)
+
+- stage: Deploy
+  jobs:
+  - template: build-templates/deploy-platform-service-job.yaml@templates
+    parameters:
+      azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+      azureContainerRegistry: $(azureContainerRegistry)
+      kubernetesServiceEndpoint: $(kubernetesServiceEndpoint)
+      imageName: $(imageName)     
+      imageTag: $(imageTag) 
+      chartName: $(chartName)
+      namespace: $(namespace)
+      secretName: $(secretName)
+      releaseName: $(releaseName)
