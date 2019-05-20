@@ -15,8 +15,8 @@ variables:
 resources:
   repositories:
     - repository: templates
-      type: github
-      name: michaeldice/docker-geoserver-sqlserver
+      type: git
+      name: PlatformTeam/platform-service
 
 stages:
 - stage: Build
