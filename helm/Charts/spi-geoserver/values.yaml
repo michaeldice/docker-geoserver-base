@@ -10,7 +10,7 @@
 platform-service:
   app: spi-geoserver
   urlPrefixes: 
-    - geoserver  
+    - /geoserver  
   namespace: spi
   version: v1
   replicaCount: 1
