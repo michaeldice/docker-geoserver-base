@@ -29,22 +29,26 @@ stages:
 
 - stage: Deploy
   jobs:
-  - task: Kubernetes@1
-    displayName: 'kubectl apply perisitent volume claim'
-    inputs:
-      kubernetesServiceEndpoint: $(kubernetesServiceEndpoint)
-      namespace: $(namespace)
-      command: apply
-      arguments: -f $(Build.SourcesDirectory)/volume-claim.yaml
+    - job: perisitentVolume
+      pool:
+        vmImage: 'ubuntu-16.04'
+      steps:
+      - task: Kubernetes@1
+        displayName: 'kubectl apply perisitent volume claim'
+        inputs:
+          kubernetesServiceEndpoint: $(kubernetesServiceEndpoint)
+          namespace: $(namespace)
+          command: apply
+          arguments: -f $(Build.SourcesDirectory)/volume-claim.yaml
 
-  - template: build-templates/deploy-platform-service-job.yaml@templates
-    parameters:
-      azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-      azureContainerRegistry: $(azureContainerRegistry)
-      kubernetesServiceEndpoint: $(kubernetesServiceEndpoint)
-      imageName: $(imageName)     
-      imageTag: $(imageTag) 
-      chartName: $(chartName)
-      namespace: $(namespace)
-      secretName: $(secretName)
-      releaseName: $(releaseName)
+    - template: build-templates/deploy-platform-service-job.yaml@templates
+      parameters:
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureContainerRegistry: $(azureContainerRegistry)
+        kubernetesServiceEndpoint: $(kubernetesServiceEndpoint)
+        imageName: $(imageName)     
+        imageTag: $(imageTag) 
+        chartName: $(chartName)
+        namespace: $(namespace)
+        secretName: $(secretName)
+        releaseName: $(releaseName)
