@@ -18,6 +18,7 @@ ARG MS_JDBC_URL=https://download.microsoft.com/download/0/2/A/02AAE597-3865-456C
 ENV JAVA_OPTS -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
 ENV GEOSERVER_HOME /opt/geoserver
 ENV DISABLE_GEOSERVER_CONSOLE false
+ENV GEOSERVER_DATA_DIR /mnt/data
 
 WORKDIR /tmp
 

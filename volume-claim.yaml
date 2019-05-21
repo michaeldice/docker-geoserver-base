@@ -1,0 +1,29 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: geoserver-pv-volume
+  labels:
+    type: local
+    app: geoserver
+spec:
+  storageClassName: default
+  capacity:
+    storage: 5MB
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/data"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: geoserver-pv-claim
+  labels:
+    app: geoserver
+spec:
+  storageClassName: default
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5MB
