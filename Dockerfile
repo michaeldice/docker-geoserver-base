@@ -55,4 +55,6 @@ RUN set -ex && \
 RUN apk del --no-cache wget unzip
 
 EXPOSE 8080
-ENTRYPOINT ["/startup-geoserver-base.sh"]
+#ENTRYPOINT ["/startup-geoserver-base.sh"]
+RUN chmod +x /opt/geoserver/bin/startup.sh
+ENTRYPOINT ["/opt/geoserver/bin/startup.sh"]
