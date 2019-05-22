@@ -45,7 +45,7 @@ platform-service:
   environmentVariables: {}
 
   volumes:
-  - name: geoServerData
+  - name: geoserver-data
     mountPath: "/mnt/data"
     volumeDefinition: |
       persistentVolumeClaim:
