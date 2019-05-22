@@ -46,7 +46,7 @@ platform-service:
 
   volumes:
   - name: geoserver-data
-    mountPath: "/mnt/data"
+    mountPath: "/geoserver-data"
     volumeDefinition: |
       persistentVolumeClaim:
         claimName: "geoserver-pv-claim"
