@@ -41,7 +41,7 @@ RUN set -ex && \
     # download and extract geoserver archive
     wget "$GS_SQLSERVER_URL" && \
     unzip "$GS_SQLSERVER_FILENAME" && \
-    mv gt-jdbc-sqlserver-20.2.jar /opt/geoserver/webapps/geoserver/WEB-INF/lib/gt-jdbc-sqlserver-20.2.jar && \
+    mv gt-jdbc-sqlserver-20.3.jar /opt/geoserver/webapps/geoserver/WEB-INF/lib/gt-jdbc-sqlserver-20.3.jar && \
     # clean up
     rm "$GS_SQLSERVER_FILENAME"
 
