@@ -32,7 +32,7 @@ platform-service:
     createGateway: false # create a gateway to expose access to this cluster
     rewrite: false
     hosts:
-      - devsph.dnvgl.com # list of hosts to direct to this gateway/service
+      - devspi.dnvgl.com # list of hosts to direct to this gateway/service
 
   apiAuthentication:
     enabled: false # whether the login redirect & callback envoy filter should be applied
