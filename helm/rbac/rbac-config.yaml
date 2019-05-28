@@ -1,0 +1,19 @@
+apiVersion: "rbac.istio.io/v1alpha1"
+kind: ServiceRole
+metadata:
+  name: activity-web-user
+spec:
+  rules:
+  - services: ["spi-activity-web.*"]
+    methods: ["GET"]
+---
+apiVersion: "rbac.istio.io/v1alpha1"
+kind: ServiceRoleBinding
+metadata:
+  name: bind-activity-web-user
+spec:
+  subjects:
+  - user: "spi-activity-web"
+  roleRef:
+    kind: ServiceRole
+    name: "activity-web-user"
