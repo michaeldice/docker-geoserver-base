@@ -1,19 +1,19 @@
 apiVersion: "rbac.istio.io/v1alpha1"
 kind: ServiceRole
 metadata:
-  name: activity-web-user
+  name: spi-geoserver-superuser
 spec:
   rules:
-  - services: ["spi-activity-web.*"]
-    methods: ["GET"]
+  - services: ["spi-geoserver.*"]
+    methods: ["*"]
 ---
 apiVersion: "rbac.istio.io/v1alpha1"
 kind: ServiceRoleBinding
 metadata:
-  name: bind-activity-web-user
+  name: bind-spi-geoserver-superuser
 spec:
   subjects:
-  - user: "spi-activity-web"
+  - group: "SUP"
   roleRef:
     kind: ServiceRole
-    name: "activity-web-user"
+    name: "spi-geoserver-superuser"
