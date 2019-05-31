@@ -14,9 +14,6 @@ platform-service:
   namespace: spi
   version: v1
   replicaCount: 1
-
-  labels: |
-    saml-idp-forward-auth-filter: enabled
  
   image:
     repository: devpusecr.azurecr.io/spi-geoserver
