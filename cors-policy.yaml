@@ -1,0 +1,18 @@
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: cors
+spec:
+  destination:
+    name: spi-basic-auth-proxy
+  corsPolicy:
+    allowOrigin:
+      - https://gl-group.maps.arcgis.com
+    allowMethods:
+      - POST
+      - GET
+      - OPTIONS
+    allowHeaders:
+      - content-type
+    maxAge: 300s
+    allowCredentials: true
