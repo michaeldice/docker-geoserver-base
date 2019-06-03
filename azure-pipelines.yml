@@ -52,15 +52,15 @@ stages:
         namespace: $(namespace)
         secretName: $(secretName)
         releaseName: $(releaseName)
-#    - job: 'AddRBAC'
-#      steps:
-#      - task: Kubernetes@1
-#        displayName: kubectl apply rbac
-#        inputs:
-#          kubernetesServiceEndpoint: $(kubernetesServiceEndpoint)
-#          namespace: $(namespace)
-#          command: apply
-#          arguments: -f $(Build.SourcesDirectory)/rbac/rbac-config.yaml
+    - job: 'AddRBAC'
+      steps:
+      - task: Kubernetes@1
+        displayName: kubectl apply rbac
+        inputs:
+          kubernetesServiceEndpoint: $(kubernetesServiceEndpoint)
+          namespace: $(namespace)
+          command: apply
+          arguments: -f $(Build.SourcesDirectory)/rbac/rbac-config.yaml
 #    - job: 'ApplyJWT'
 #      steps:
 #      - task: Kubernetes@1
