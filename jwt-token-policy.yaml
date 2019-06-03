@@ -13,5 +13,5 @@ spec:
       jwksUri: https://devspi.dnvgl.com/forward-auth/jwk
       trigger_rules:
       - excluded_paths:
-        - prefix: /cite
+        - prefix: /geoserver/cite
   principalBinding: USE_PEER
