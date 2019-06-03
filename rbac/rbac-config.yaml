@@ -13,7 +13,8 @@ metadata:
   name: bind-spi-geoserver-superuser
 spec:
   subjects:
-  - group: "SUP"
+#  - group: "SUP"
+  - user: "*"
   roleRef:
     kind: ServiceRole
     name: "spi-geoserver-superuser"
