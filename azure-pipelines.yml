@@ -61,3 +61,12 @@ stages:
           namespace: $(namespace)
           command: apply
           arguments: -f $(Build.SourcesDirectory)/rbac/rbac-config.yaml
+    - job: 'ApplyJWT'
+      steps:
+      - task: Kubernetes@1
+        displayName: kubectl apply JWT policy
+        inputs:
+          kubernetesServiceEndpoint: $(kubernetesServiceEndpoint)
+          namespace: $(namespace)
+          command: apply
+          arguments: -f $(Build.SourcesDirectory)/jwt-token-policy.yaml          

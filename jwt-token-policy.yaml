@@ -1,0 +1,17 @@
+apiVersion: "authentication.istio.io/v1alpha1"
+kind: "Policy"
+metadata:
+  name: spi-geoserver-jwt
+spec:
+  targets:
+  - name: spi-geoserver
+  peers:
+  - mtls: {}
+  origins:
+  - jwt:
+      issuer: https://devspi.dnvgl.com
+      jwksUri: https://devspi.dnvgl.com/forward-auth/jwk
+      trigger_rules:
+      - excluded_paths:
+        - prefix: /cite
+  principalBinding: USE_PEER
