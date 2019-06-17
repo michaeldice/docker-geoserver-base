@@ -6,11 +6,11 @@ metadata:
     type: local
     app: geoserver
 spec:
-  storageClassName: default
+  storageClassName: azurefile
   capacity:
     storage: 1Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   hostPath:
     path: "/mnt/data"
 ---
@@ -21,9 +21,9 @@ metadata:
   labels:
     app: geoserver
 spec:
-  storageClassName: default
+  storageClassName: azurefile
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 1Gi
