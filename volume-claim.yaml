@@ -6,7 +6,7 @@ metadata:
     type: local
     app: geoserver
 spec:
-  storageClassName: azurefile
+  storageClassName: azurefile-retain
   capacity:
     storage: 1Gi
   accessModes:
