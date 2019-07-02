@@ -9,7 +9,7 @@ variables:
   namespace: spi9-dev
   releaseName: spi9-dev-geoserver
   myArmServicePrincipalConnection: 'SW Pipeline Ecosystem'
-  platformTeamArmServicePrincipalConnection: michaeldice #platformteamcontainerregistry2
+  platformTeamArmServicePrincipalConnection: platformteamcontainerregistry2 #michaeldice 
   myClusterKubernetesConnection: devpusek8s01sph
   myContainerRegistryName: devpusecr
   #azureSubscriptionEndpoint: 'SW Pipeline Ecosystem'
