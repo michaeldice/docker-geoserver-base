@@ -4,7 +4,7 @@ trigger:
 variables:
   chartName: 'spi-geoserver'
   imageTag: $(Build.BuildNumber)
-  imageName: spi-geoserver:$(imageTag)
+  imageName: spi-geoserver
   secretName: spi-geoserver-secret
   namespace: spi9-dev
   releaseName: spi9-dev-geoserver
