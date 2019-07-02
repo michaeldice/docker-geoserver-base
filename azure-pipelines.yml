@@ -8,65 +8,119 @@ variables:
   secretName: spi-geoserver-secret
   namespace: spi9-dev
   releaseName: spi9-dev-geoserver
-  azureSubscriptionEndpoint: 'SW Pipeline Ecosystem'
-  kubernetesServiceEndpoint: devpusek8s01sph
-  azureContainerRegistry: devpusecr.azurecr.io
+  myArmServicePrincipalConnection: 'SW Pipeline Ecosystem'
+  platformTeamArmServicePrincipalConnection: michaeldice #platformteamcontainerregistry2
+  myClusterKubernetesConnection: devpusek8s01sph
+  myContainerRegistryName: devpusecr
+  #azureSubscriptionEndpoint: 'SW Pipeline Ecosystem'
+  #kubernetesServiceEndpoint: devpusek8s01sph
+  #azureContainerRegistry: devpusecr.azurecr.io
 
 resources:
   repositories:
     - repository: templates
       type: git
       name: PlatformTeam/platform-service
+      ref: refs/tags/0.1.0
 
 stages:
 - stage: Build
   jobs:
-  - template: build-templates/build-platform-service-job.yaml@templates
-    parameters:
-      azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-      azureContainerRegistry: $(azureContainerRegistry)
-      imageName: $(imageName)
+  - job: 'BuildPushPublish'
+    steps:
+    - task: Docker@2
+      inputs:
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        containerRegistry: $(myContainerRegistryName)
+        repository: $(imageName)
+        tags: $(imageTag)
+
+    - template: build-templates/publish-charts-as-artifacts.yaml@templates
+      parameters:
+        helmChartFolder: '$(Build.SourcesDirectory)/helm/Charts'
 
 - stage: Deploy
   jobs:
-    - job: perisitentVolume
-      pool:
-        vmImage: 'ubuntu-16.04'
-      steps:
-      - task: Kubernetes@1
-        displayName: 'kubectl apply perisitent volume claim'
-        inputs:
-          kubernetesServiceEndpoint: $(kubernetesServiceEndpoint)
-          namespace: $(namespace)
-          command: apply
-          arguments: -f $(Build.SourcesDirectory)/volume-claim.yaml
+  - template: build-templates/deploy-platform-service-job.yaml@templates
+    parameters:
+      myClusterArmServicePrincipalConnection: $(myArmServicePrincipalConnection)
+      myContainerRegistryArmServicePrincipalConnection: $(myArmServicePrincipalConnection)
+      platformTeamArmServicePrincipalConnection: $(platformTeamArmServicePrincipalConnection)
+      myContainerRegistryName: $(myContainerRegistryName)
+      myClusterKubernetesConnection: $(myClusterKubernetesConnection)
+      imageName: $(imageName)     
+      imageTag: $(imageTag) 
+      chartName: $(chartName)
+      namespace: $(namespace)
+      secretName: $(secretName)
+      releaseName: $(releaseName) 
 
-    - template: build-templates/deploy-platform-service-job.yaml@templates
-      parameters:
-        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-        azureContainerRegistry: $(azureContainerRegistry)
+- stage: ClusterConfig
+  jobs:
+  - job: perisitentVolume
+    pool:
+      vmImage: 'ubuntu-16.04'
+    steps:
+    - task: Kubernetes@1
+      displayName: 'kubectl apply perisitent volume claim'
+      inputs:
         kubernetesServiceEndpoint: $(kubernetesServiceEndpoint)
-        imageName: $(imageName)     
-        imageTag: $(imageTag) 
-        chartName: $(chartName)
         namespace: $(namespace)
-        secretName: $(secretName)
-        releaseName: $(releaseName)
-    - job: 'AddRBAC'
-      steps:
-      - task: Kubernetes@1
-        displayName: kubectl apply rbac
-        inputs:
-          kubernetesServiceEndpoint: $(kubernetesServiceEndpoint)
-          namespace: $(namespace)
-          command: apply
-          arguments: -f $(Build.SourcesDirectory)/rbac/rbac-config.yaml
-#    - job: 'ApplyJWT'
-#      steps:
-#      - task: Kubernetes@1
-#        displayName: kubectl apply JWT policy
-#        inputs:
-#          kubernetesServiceEndpoint: $(kubernetesServiceEndpoint)
-#          namespace: $(namespace)
-#          command: apply
-#          arguments: -f $(Build.SourcesDirectory)/jwt-token-policy.yaml          
+        command: apply
+        arguments: -f $(Build.SourcesDirectory)/volume-claim.yaml
+  - job: 'AddRBAC'
+    steps:
+    - task: Kubernetes@1
+      displayName: kubectl apply rbac
+      inputs:
+        kubernetesServiceEndpoint: $(myClusterKubernetesConnection)
+        namespace: $(namespace)
+        command: apply
+        arguments: -f $(Build.SourcesDirectory)/rbac/rbac-config.yaml
+#
+#
+#
+#
+# - stage: Build
+#   jobs:
+#   - template: build-templates/build-platform-service-job.yaml@templates
+#     parameters:
+#       azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+#       azureContainerRegistry: $(azureContainerRegistry)
+#       imageName: $(imageName)
+
+# - stage: Deploy
+#   jobs:
+#     - job: perisitentVolume
+#       pool:
+#         vmImage: 'ubuntu-16.04'
+#       steps:
+#       - task: Kubernetes@1
+#         displayName: 'kubectl apply perisitent volume claim'
+#         inputs:
+#           kubernetesServiceEndpoint: $(kubernetesServiceEndpoint)
+#           namespace: $(namespace)
+#           command: apply
+#           arguments: -f $(Build.SourcesDirectory)/volume-claim.yaml
+
+#     - template: build-templates/deploy-platform-service-job.yaml@templates
+#       parameters:
+#         azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+#         azureContainerRegistry: $(azureContainerRegistry)
+#         kubernetesServiceEndpoint: $(kubernetesServiceEndpoint)
+#         imageName: $(imageName)     
+#         imageTag: $(imageTag) 
+#         chartName: $(chartName)
+#         namespace: $(namespace)
+#         secretName: $(secretName)
+#         releaseName: $(releaseName)
+#     - job: 'AddRBAC'
+#       steps:
+#       - task: Kubernetes@1
+#         displayName: kubectl apply rbac
+#         inputs:
+#           kubernetesServiceEndpoint: $(kubernetesServiceEndpoint)
+#           namespace: $(namespace)
+#           command: apply
+#           arguments: -f $(Build.SourcesDirectory)/rbac/rbac-config.yaml
