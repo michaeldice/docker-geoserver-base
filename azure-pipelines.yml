@@ -40,6 +40,20 @@ stages:
       parameters:
         helmChartFolder: '$(Build.SourcesDirectory)/helm/Charts'
 
+- stage: VolumeClaim
+  jobs:
+  - job: perisitentVolume
+    pool:
+      vmImage: 'ubuntu-16.04'
+    steps:
+    - task: Kubernetes@1
+      displayName: 'kubectl apply perisitent volume claim'
+      inputs:
+        kubernetesServiceEndpoint: $(myClusterKubernetesConnection)
+        namespace: $(namespace)
+        command: apply
+        arguments: -f $(Build.SourcesDirectory)/volume-claim.yaml
+
 - stage: Deploy
   jobs:
   - template: build-templates/deploy-platform-service-job.yaml@templates
@@ -58,17 +72,6 @@ stages:
 
 - stage: ClusterConfig
   jobs:
-  - job: perisitentVolume
-    pool:
-      vmImage: 'ubuntu-16.04'
-    steps:
-    - task: Kubernetes@1
-      displayName: 'kubectl apply perisitent volume claim'
-      inputs:
-        kubernetesServiceEndpoint: $(myClusterKubernetesConnection)
-        namespace: $(namespace)
-        command: apply
-        arguments: -f $(Build.SourcesDirectory)/volume-claim.yaml
   - job: 'AddRBAC'
     steps:
     - task: Kubernetes@1
