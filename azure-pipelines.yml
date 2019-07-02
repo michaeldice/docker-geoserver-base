@@ -65,7 +65,7 @@ stages:
     - task: Kubernetes@1
       displayName: 'kubectl apply perisitent volume claim'
       inputs:
-        kubernetesServiceEndpoint: $(kubernetesServiceEndpoint)
+        kubernetesServiceEndpoint: $(myClusterKubernetesConnection)
         namespace: $(namespace)
         command: apply
         arguments: -f $(Build.SourcesDirectory)/volume-claim.yaml
