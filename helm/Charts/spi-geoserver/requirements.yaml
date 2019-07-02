@@ -1,4 +1,4 @@
 dependencies:
   - name: platform-service
-    version: 0.9.19
+    version: 0.9.46
     repository: "@platformteam"
