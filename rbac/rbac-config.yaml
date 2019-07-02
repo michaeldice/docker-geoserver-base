@@ -4,7 +4,7 @@ metadata:
   name: spi-geoserver-superuser
 spec:
   rules:
-  - services: ["spi-geoserver.*"]
+  - services: ["spi-geoserver-dev.*"]
     methods: ["*"]
 ---
 apiVersion: "rbac.istio.io/v1alpha1"
