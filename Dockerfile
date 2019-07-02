@@ -38,7 +38,7 @@ RUN set -ex && \
     rm "$GS_ARCHIVE_FILENAME"
 
 RUN set -ex && \
-    # download and extract geoserver archive
+    # download and extract geoserver MSSQL plugin
     wget "$GS_SQLSERVER_URL" && \
     unzip "$GS_SQLSERVER_FILENAME" && \
     mv gt-jdbc-sqlserver-20.3.jar /opt/geoserver/webapps/geoserver/WEB-INF/lib/gt-jdbc-sqlserver-20.3.jar && \
@@ -46,12 +46,19 @@ RUN set -ex && \
     rm "$GS_SQLSERVER_FILENAME"
 
 RUN set -ex && \
-    # download and extract geoserver archive
+    # download and extract Microsoft JDBC driver
     wget "$MS_JDBC_URL" && \
     tar -xvzf  "$MS_JDBC_FILENAME" && \
     mv ./sqljdbc_6.0/enu/jre8/sqljdbc42.jar /opt/geoserver/webapps/geoserver/WEB-INF/lib/sqljdbc42.jar && \
     # clean up
     rm "$MS_JDBC_FILENAME"
+
+# enable CORS
+RUN wget -q http://central.maven.org/maven2/org/eclipse/jetty/jetty-servlets/9.2.13.v20150730/jetty-servlets-9.2.13.v20150730.jar -P /opt/geoserver/webapps/geoserver/WEB-INF/lib \
+    && sed -i 's_<!-- <filter>_<filter>_' /opt/geoserver/webapps/geoserver/WEB-INF/web.xml \
+    && sed -i 's_</filter> -->_</filter>_' /opt/geoserver/webapps/geoserver/WEB-INF/web.xml \
+    && sed -i 's_<!-- <filter-mapping>_<filter-mapping>_' /opt/geoserver/webapps/geoserver/WEB-INF/web.xml \
+    && sed -i 's_</filter-mapping> -->_</filter-mapping>_' /opt/geoserver/webapps/geoserver/WEB-INF/web.xml
 
 RUN apk del --no-cache wget unzip
 

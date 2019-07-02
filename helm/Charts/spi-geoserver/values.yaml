@@ -8,9 +8,9 @@
 # routing rules for service
 
 platform-service:
-  app: spi-geoserver
+  app: spi-geoserver-dev
   urlPrefixes: 
-    - /geoserver  
+    - /geoserver-dev  
   namespace: spi
   version: v1
   replicaCount: 1
@@ -45,11 +45,11 @@ platform-service:
   environmentVariables: {}
 
   volumes:
-  - name: geoserver-data
+  - name: geoserver-dev-data
     mountPath: "/geoserver-data"
     volumeDefinition: |
       persistentVolumeClaim:
-        claimName: "geoserver-pv-claim"
+        claimName: "geoserver-dev-pv-claim"
 
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious

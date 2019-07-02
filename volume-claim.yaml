@@ -1,7 +1,7 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: geoserver-pv-volume
+  name: geoserver-dev-pv-volume
   labels:
     type: local
     app: geoserver
@@ -17,7 +17,7 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: geoserver-pv-claim
+  name: geoserver-dev-pv-claim
   labels:
     app: geoserver
 spec:
