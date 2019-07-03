@@ -30,7 +30,7 @@ platform-service:
     exposeService: true  # map virtual service to a gateway expose this service
     name: default/gateway   # gateway name
     createGateway: false # create a gateway to expose access to this cluster
-    rewrite: false
+    rewrite: true
     hosts:
       - devspi.dnvgl.com # list of hosts to direct to this gateway/service
 
