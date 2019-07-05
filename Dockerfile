@@ -54,11 +54,11 @@ RUN set -ex && \
     rm "$MS_JDBC_FILENAME"
 
 # enable CORS
-#RUN wget -q http://central.maven.org/maven2/org/eclipse/jetty/jetty-servlets/9.2.13.v20150730/jetty-servlets-9.2.13.v20150730.jar -P /opt/geoserver/webapps/geoserver/WEB-INF/lib \
-#    && sed -i 's_<!-- <filter>_<filter>_' /opt/geoserver/webapps/geoserver/WEB-INF/web.xml \
-#    && sed -i 's_</filter> -->_</filter>_' /opt/geoserver/webapps/geoserver/WEB-INF/web.xml \
-#    && sed -i 's_<!-- <filter-mapping>_<filter-mapping>_' /opt/geoserver/webapps/geoserver/WEB-INF/web.xml \
-#    && sed -i 's_</filter-mapping> -->_</filter-mapping>_' /opt/geoserver/webapps/geoserver/WEB-INF/web.xml
+RUN wget -q http://central.maven.org/maven2/org/eclipse/jetty/jetty-servlets/9.2.13.v20150730/jetty-servlets-9.2.13.v20150730.jar -P /opt/geoserver/webapps/geoserver/WEB-INF/lib \
+    && sed -i 's_<!-- <filter>_<filter>_' /opt/geoserver/webapps/geoserver/WEB-INF/web.xml \
+    && sed -i 's_</filter> -->_</filter>_' /opt/geoserver/webapps/geoserver/WEB-INF/web.xml \
+    && sed -i 's_<!-- <filter-mapping>_<filter-mapping>_' /opt/geoserver/webapps/geoserver/WEB-INF/web.xml \
+    && sed -i 's_</filter-mapping> -->_</filter-mapping>_' /opt/geoserver/webapps/geoserver/WEB-INF/web.xml
 
 RUN apk del --no-cache wget unzip
 
