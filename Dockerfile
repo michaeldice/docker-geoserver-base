@@ -6,7 +6,7 @@
 
 FROM openjdk:8-jre-alpine
 
-ARG GS_VERSION=2.14.3
+ARG GS_VERSION=2.14.4
 ARG GS_ARCHIVE_FILENAME=geoserver-${GS_VERSION}-bin.zip
 ARG GS_URL=https://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/${GS_ARCHIVE_FILENAME}
 ARG GS_SQLSERVER_FILENAME=geoserver-${GS_VERSION}-sqlserver-plugin.zip
@@ -14,13 +14,14 @@ ARG GS_SQLSERVER_URL=http://sourceforge.net/projects/geoserver/files/GeoServer/$
 ARG MS_JDBC_FILENAME=sqljdbc_6.0.8112.200_enu.tar.gz
 ARG MS_JDBC_URL=https://download.microsoft.com/download/0/2/A/02AAE597-3865-456C-AE7F-613F99F850A8/${MS_JDBC_FILENAME}
 
+WORKDIR /tmp
+
 # for correct cpu/memory detection inside a container
 ENV JAVA_OPTS -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
 ENV GEOSERVER_HOME /opt/geoserver
 ENV DISABLE_GEOSERVER_CONSOLE false
-ENV GEOSERVER_DATA_DIR /geoserver-data
-
-WORKDIR /tmp
+ENV GEOSERVER_DATA_DIR /home/geoserver-data
+ENV GEOWEBCACHE_CACHE_DIR /home/geoserver-gwc
 
 COPY startup-geoserver-base.sh /startup-geoserver-base.sh
 
@@ -62,7 +63,21 @@ RUN wget -q http://central.maven.org/maven2/org/eclipse/jetty/jetty-servlets/9.2
 
 RUN apk del --no-cache wget unzip
 
-EXPOSE 8080
+COPY startup-geoserver-azure-web-app.sh /startup-geoserver-azure-web-app.sh
+# sshd_config from https://raw.githubusercontent.com/Azure-App-Service/node/master/8.2.1/sshd_config
+COPY sshd_config /etc/ssh/sshd_config
+
+RUN set -ex && \
+    # need this for ssh access to the running container
+    apk add --no-cache openssh openrc && \
+    # configure ssh access (don't worry it's via the Azure App Service platform, there's no external access)
+    echo "root:Docker!" | chpasswd && \
+    chmod 0555 /startup-geoserver-azure-web-app.sh
+
+EXPOSE 2222 8080
+ENTRYPOINT ["/startup-geoserver-azure-web-app.sh"]
+
+#EXPOSE 8080
 #ENTRYPOINT ["/startup-geoserver-base.sh"]
-RUN chmod +x /opt/geoserver/bin/startup.sh
-ENTRYPOINT ["/opt/geoserver/bin/startup.sh"]
+#RUN chmod +x /opt/geoserver/bin/startup.sh
+#ENTRYPOINT ["/opt/geoserver/bin/startup.sh"]
