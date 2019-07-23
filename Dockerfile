@@ -23,8 +23,6 @@ ENV DISABLE_GEOSERVER_CONSOLE false
 ENV GEOSERVER_DATA_DIR /home/geoserver-data
 ENV GEOWEBCACHE_CACHE_DIR /home/geoserver-gwc
 
-COPY startup-geoserver-base.sh /startup-geoserver-base.sh
-
 # need these just during build
 RUN apk add --no-cache wget unzip
 
