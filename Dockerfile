@@ -63,6 +63,7 @@ RUN wget -q http://central.maven.org/maven2/org/eclipse/jetty/jetty-servlets/9.2
 
 RUN apk del --no-cache wget unzip
 
+COPY startup-geoserver-base.sh /startup-geoserver-base.sh
 COPY startup-geoserver-azure-web-app.sh /startup-geoserver-azure-web-app.sh
 # sshd_config from https://raw.githubusercontent.com/Azure-App-Service/node/master/8.2.1/sshd_config
 COPY sshd_config /etc/ssh/sshd_config
