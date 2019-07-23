@@ -71,7 +71,8 @@ RUN set -ex && \
     apk add --no-cache openssh openrc && \
     # configure ssh access (don't worry it's via the Azure App Service platform, there's no external access)
     echo "root:Docker!" | chpasswd && \
-    chmod 0555 /startup-geoserver-azure-web-app.sh
+    chmod 0555 /startup-geoserver-azure-web-app.sh && \
+    chmod 0555 /startup-geoserver-base.sh
 
 EXPOSE 2222 8080
 ENTRYPOINT ["/startup-geoserver-azure-web-app.sh"]
