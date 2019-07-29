@@ -11,6 +11,8 @@ ARG GS_ARCHIVE_FILENAME=geoserver-${GS_VERSION}-bin.zip
 ARG GS_URL=https://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/${GS_ARCHIVE_FILENAME}
 ARG GS_SQLSERVER_FILENAME=geoserver-${GS_VERSION}-sqlserver-plugin.zip
 ARG GS_SQLSERVER_URL=http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/${GS_SQLSERVER_FILENAME}
+ARG GS_VECTORTILES_FILENAME=geoserver-${GS_VERSION}-vectortiles-plugin.zip
+ARG GS_VECTORTILES_URL=http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/${GS_VECTORTILES_FILENAME}
 ARG MS_JDBC_FILENAME=sqljdbc_6.0.8112.200_enu.tar.gz
 ARG MS_JDBC_URL=https://download.microsoft.com/download/0/2/A/02AAE597-3865-456C-AE7F-613F99F850A8/${MS_JDBC_FILENAME}
 
@@ -43,6 +45,12 @@ RUN set -ex && \
     mv gt-jdbc-sqlserver-20.3.jar /opt/geoserver/webapps/geoserver/WEB-INF/lib/gt-jdbc-sqlserver-20.3.jar && \
     # clean up
     rm "$GS_SQLSERVER_FILENAME"
+
+RUN set -ex && \
+    # download and extract geoserver Vector Tiles plugin
+    wget -O "$GS_VECTORTILES_FILENAME" "$GS_VECTORTILES_URL" &&\
+    unzip "$GS_VECTORTILES_FILENAME" -d /opt/geoserver/webapps/geoserver/WEB-INF/lib &&\
+    rm "$GS_VECTORTILES_FILENAME"
 
 RUN set -ex && \
     # download and extract Microsoft JDBC driver
