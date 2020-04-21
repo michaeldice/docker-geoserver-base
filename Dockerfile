@@ -42,7 +42,7 @@ RUN set -ex && \
     # download and extract geoserver MSSQL plugin
     wget "$GS_SQLSERVER_URL" && \
     unzip "$GS_SQLSERVER_FILENAME" && \
-    mv gt-jdbc-sqlserver-21.2.jar /opt/geoserver/webapps/geoserver/WEB-INF/lib/gt-jdbc-sqlserver-21.2.jar && \
+    mv gt-jdbc-sqlserver-21.5.jar /opt/geoserver/webapps/geoserver/WEB-INF/lib/gt-jdbc-sqlserver-21.5.jar && \
     # clean up
     rm "$GS_SQLSERVER_FILENAME"
 
