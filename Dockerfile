@@ -60,7 +60,7 @@ RUN set -ex && \
     # clean up
     rm "$MS_JDBC_FILENAME"
 
-# enable CORS
+# enable CORS 
 RUN wget -q https://repo.maven.apache.org/maven2/org/eclipse/jetty/jetty-servlets/9.4.12.v20180830/jetty-servlets-9.4.12.v20180830.jar -P /opt/geoserver/webapps/geoserver/WEB-INF/lib \
     && sed -i 's_<!-- <filter>_<filter>_' /opt/geoserver/webapps/geoserver/WEB-INF/web.xml \
     && sed -i 's_</filter> -->_</filter>_' /opt/geoserver/webapps/geoserver/WEB-INF/web.xml \
