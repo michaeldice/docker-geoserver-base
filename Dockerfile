@@ -6,7 +6,7 @@
 
 FROM openjdk:8-jre-alpine
 
-ARG GS_VERSION=2.15.5
+ARG GS_VERSION=2.16.2
 ARG GS_ARCHIVE_FILENAME=geoserver-${GS_VERSION}-bin.zip
 ARG GS_URL=https://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/${GS_ARCHIVE_FILENAME}
 ARG GS_SQLSERVER_FILENAME=geoserver-${GS_VERSION}-sqlserver-plugin.zip
@@ -42,7 +42,7 @@ RUN set -ex && \
     # download and extract geoserver MSSQL plugin
     wget "$GS_SQLSERVER_URL" && \
     unzip "$GS_SQLSERVER_FILENAME" && \
-    mv gt-jdbc-sqlserver-21.5.jar /opt/geoserver/webapps/geoserver/WEB-INF/lib/gt-jdbc-sqlserver-21.5.jar && \
+    mv gt-jdbc-sqlserver-22.2.jar /opt/geoserver/webapps/geoserver/WEB-INF/lib/gt-jdbc-sqlserver-22.2.jar && \
     # clean up
     rm "$GS_SQLSERVER_FILENAME"
 
